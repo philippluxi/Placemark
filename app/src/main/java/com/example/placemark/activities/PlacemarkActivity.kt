@@ -1,16 +1,18 @@
 package com.example.placemark.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.placemark.R
 import kotlinx.android.synthetic.main.activity_placemark.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
 import org.wit.placemark.models.PlacemarkModel
-import com.example.placemark.R
+
 
 class PlacemarkActivity : AppCompatActivity(), AnkoLogger {
 
+  val placemarks = ArrayList<PlacemarkModel>()
   var placemark = PlacemarkModel()
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +22,10 @@ class PlacemarkActivity : AppCompatActivity(), AnkoLogger {
     btnAdd.setOnClickListener {
       placemark.title = placemarkTitle.text.toString()
       if (placemark.title.isNotEmpty()) {
-        info("add Button Pressed: $placemark")
+        info("add Button Pressed - Input Text: $placemark")
+        placemarks.add(placemark)
+        info("Placemark added to List")
+        info("Current List: $placemarks")
       } else {
         toast("Please Enter a title")
       }
