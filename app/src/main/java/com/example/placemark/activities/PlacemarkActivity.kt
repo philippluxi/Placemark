@@ -2,22 +2,25 @@ package com.example.placemark.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.placemark.R
 import kotlinx.android.synthetic.main.activity_placemark.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
+import org.wit.placemark.models.PlacemarkModel
+import com.example.placemark.R
 
 class PlacemarkActivity : AppCompatActivity(), AnkoLogger {
+
+  var placemark = PlacemarkModel()
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    info("Placemark Activity started...")
     setContentView(R.layout.activity_placemark)
 
     btnAdd.setOnClickListener {
-      val placemarkTitle = placemarkTitle.text.toString()
-      if (placemarkTitle.isNotEmpty()) {
-        info("add Button Pressed: $placemarkTitle")
+      placemark.title = placemarkTitle.text.toString()
+      if (placemark.title.isNotEmpty()) {
+        info("add Button Pressed: $placemark")
       } else {
         toast("Please Enter a title")
       }
