@@ -1,4 +1,4 @@
-package org.wit.placemark.models
+package com.example.placemark.models
 
 data class PlacemarkModel(
     var title: String = "",
