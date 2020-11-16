@@ -5,12 +5,14 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_placemark_list.*
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.startActivityForResult
 import com.example.placemark.R
 import com.example.placemark.main.MainApp
-import org.jetbrains.anko.startActivityForResult
+import com.example.placemark.models.PlacemarkModel
 
 
-class PlacemarkListActivity : AppCompatActivity() {
+class PlacemarkListActivity : AppCompatActivity(), PlacemarkListener {
 
     lateinit var app: MainApp
 
@@ -21,7 +23,7 @@ class PlacemarkListActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = PlacemarkAdapter(app.placemarks.findAll())
+        recyclerView.adapter = PlacemarkAdapter(app.placemarks.findAll(), this)
 
         toolbar.title = title
         setSupportActionBar(toolbar)
@@ -37,5 +39,12 @@ class PlacemarkListActivity : AppCompatActivity() {
             R.id.item_add -> startActivityForResult<PlacemarkActivity>(0)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPlacemarkClick(placemark: PlacemarkModel) {
+        startActivityForResult(
+            intentFor<PlacemarkActivity>()
+                .putExtra("placemark_edit", placemark), 0
+        )
     }
 }
