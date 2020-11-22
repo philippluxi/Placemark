@@ -1,9 +1,13 @@
 package com.example.placemark.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.*
 import com.example.placemark.R
+import com.example.placemark.helpers.readImage
+import com.example.placemark.helpers.showImagePicker
+import com.example.placemark.helpers.readImageFromPath
 import com.example.placemark.main.MainApp
 import kotlinx.android.synthetic.main.activity_placemark.*
 import org.jetbrains.anko.AnkoLogger
@@ -16,6 +20,7 @@ class PlacemarkActivity : AppCompatActivity(), AnkoLogger {
 
   var placemark = PlacemarkModel()
   lateinit var app: MainApp
+  val IMAGE_REQUEST = 1
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -33,6 +38,10 @@ class PlacemarkActivity : AppCompatActivity(), AnkoLogger {
       placemarkTitle.setText(placemark.title)
       description.setText(placemark.description)
       btnAdd.setText(R.string.button_savePlacemark)
+      placemarkImage.setImageBitmap(readImageFromPath(this, placemark.image))
+      if (placemark.image != null) {
+        chooseImage.setText(R.string.change_placemark_image)
+      }
     }
 
     btnAdd.setOnClickListener {
@@ -51,6 +60,10 @@ class PlacemarkActivity : AppCompatActivity(), AnkoLogger {
         finish()
       }
     }
+
+    chooseImage.setOnClickListener {
+      showImagePicker(this, IMAGE_REQUEST)
+    }
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -65,5 +78,18 @@ class PlacemarkActivity : AppCompatActivity(), AnkoLogger {
       }
     }
     return super.onOptionsItemSelected(item)
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    when (requestCode) {
+      IMAGE_REQUEST -> {
+        if (data != null) {
+          placemark.image = data.data.toString()
+          placemarkImage.setImageBitmap(readImage(this, resultCode, data))
+          chooseImage.setText(R.string.change_placemark_image)
+        }
+      }
+    }
   }
 }
