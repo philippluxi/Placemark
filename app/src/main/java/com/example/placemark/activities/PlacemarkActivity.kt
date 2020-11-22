@@ -9,11 +9,13 @@ import com.example.placemark.helpers.readImage
 import com.example.placemark.helpers.showImagePicker
 import com.example.placemark.helpers.readImageFromPath
 import com.example.placemark.main.MainApp
+import com.example.placemark.models.Location
 import kotlinx.android.synthetic.main.activity_placemark.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
 import com.example.placemark.models.PlacemarkModel
+import org.jetbrains.anko.intentFor
 
 
 class PlacemarkActivity : AppCompatActivity(), AnkoLogger {
@@ -21,6 +23,8 @@ class PlacemarkActivity : AppCompatActivity(), AnkoLogger {
   var placemark = PlacemarkModel()
   lateinit var app: MainApp
   val IMAGE_REQUEST = 1
+  val LOCATION_REQUEST = 2
+  var location = Location(48.983329, 12.105644, 15f)
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -66,7 +70,10 @@ class PlacemarkActivity : AppCompatActivity(), AnkoLogger {
     }
 
     placemarkLocation.setOnClickListener {
-      info("Set Location pressed")
+      startActivityForResult(
+        intentFor<MapActivity>().putExtra("location", location),
+        LOCATION_REQUEST
+      )
     }
   }
 
@@ -92,6 +99,11 @@ class PlacemarkActivity : AppCompatActivity(), AnkoLogger {
           placemark.image = data.data.toString()
           placemarkImage.setImageBitmap(readImage(this, resultCode, data))
           chooseImage.setText(R.string.change_placemark_image)
+        }
+      }
+      LOCATION_REQUEST -> {
+        if (data != null) {
+          location = data.extras?.getParcelable<Location>("location")!!
         }
       }
     }
