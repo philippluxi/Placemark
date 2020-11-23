@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.placemark.R
 import com.example.placemark.helpers.readImageFromPath
 import com.example.placemark.models.PlacemarkModel
+import kotlinx.android.synthetic.main.activity_placemark.view.*
 import kotlinx.android.synthetic.main.card_placemark.view.*
+import kotlinx.android.synthetic.main.card_placemark.view.description
+import kotlinx.android.synthetic.main.card_placemark.view.placemarkTitle
 
 interface PlacemarkListener {
     fun onPlacemarkClick(placemark: PlacemarkModel)
