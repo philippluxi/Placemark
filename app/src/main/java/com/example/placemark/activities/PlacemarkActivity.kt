@@ -10,11 +10,12 @@ import com.example.placemark.helpers.showImagePicker
 import com.example.placemark.helpers.readImageFromPath
 import com.example.placemark.main.MainApp
 import com.example.placemark.models.Location
+import com.example.placemark.models.PlacemarkModel
+import com.example.placemark.models.PlacemarkStore
 import kotlinx.android.synthetic.main.activity_placemark.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.jetbrains.anko.toast
-import com.example.placemark.models.PlacemarkModel
 import org.jetbrains.anko.intentFor
 
 
@@ -91,6 +92,10 @@ class PlacemarkActivity : AppCompatActivity(), AnkoLogger {
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.item_cancel -> {
+        finish()
+      }
+      R.id.item_delete -> {
+        app.placemarks.delete(placemark)
         finish()
       }
     }
