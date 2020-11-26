@@ -5,12 +5,17 @@ import android.os.Bundle
 import com.google.android.gms.maps.GoogleMap
 import kotlinx.android.synthetic.main.activity_placemark_list.*
 import com.example.placemark.R
+import com.example.placemark.main.MainApp
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_placemark_list.toolbar
 import kotlinx.android.synthetic.main.activity_placemark_maps.*
 
 class PlacemarkMapsActivity : AppCompatActivity() {
 
     lateinit var map: GoogleMap
+    lateinit var app: MainApp
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +23,22 @@ class PlacemarkMapsActivity : AppCompatActivity() {
         toolbar.title = title
         setSupportActionBar(toolbar)
         mapView.onCreate(savedInstanceState)
+
+        app = application as MainApp
+        mapView.getMapAsync {
+            map = it
+            configureMap()
+        }
+    }
+
+    fun configureMap() {
+        map.uiSettings.isZoomControlsEnabled = true
+        app.placemarks.findAll().forEach {
+            val loc = LatLng(it.lat, it.lng)
+            val options = MarkerOptions().title(it.title).position(loc)
+            map.addMarker(options).tag = it.id
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, it.zoom))
+        }
     }
 
     override fun onDestroy() {
