@@ -41,8 +41,8 @@ class PlacemarkJSONStore : PlacemarkStore, AnkoLogger {
 
 
     override fun update(placemark: PlacemarkModel) {
-        deserialize()
-        var foundPlacemark: PlacemarkModel? = placemarks.find { p -> p.id == placemark.id }
+        val placemarksList = findAll() as ArrayList<PlacemarkModel>
+        var foundPlacemark: PlacemarkModel? = placemarksList.find { p -> p.id == placemark.id }
         if (foundPlacemark != null) {
             foundPlacemark.title = placemark.title
             foundPlacemark.description = placemark.description
