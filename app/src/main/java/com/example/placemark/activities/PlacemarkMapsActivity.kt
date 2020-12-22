@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.google.android.gms.maps.GoogleMap
 import kotlinx.android.synthetic.main.activity_placemark_list.*
 import com.example.placemark.R
+import com.example.placemark.helpers.readImageFromPath
 import com.example.placemark.main.MainApp
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
@@ -33,8 +34,12 @@ class PlacemarkMapsActivity : AppCompatActivity(), GoogleMap.OnMarkerClickListen
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        currentTitle.text = marker.title
-        return false
+        val tag = marker.tag as Long
+        val placemark = app.placemarks.findById(tag)
+        currentTitle.text = placemark!!.title
+        currentDescription.text = placemark.description
+        currentImage.setImageBitmap(readImageFromPath(this, placemark.image))
+        return true
     }
 
     fun configureMap() {
