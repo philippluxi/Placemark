@@ -6,7 +6,7 @@ import com.example.placemark.helpers.showImagePicker
 import com.example.placemark.main.MainApp
 import com.example.placemark.models.Location
 import com.example.placemark.models.PlacemarkModel
-import com.example.placemark.activities.PlacemarkView
+
 
 class PlacemarkPresenter(val view: PlacemarkView) {
 
@@ -58,7 +58,7 @@ class PlacemarkPresenter(val view: PlacemarkView) {
             location.zoom = placemark.zoom
         }
         view.startActivityForResult(
-            view.intentFor<MapActivity>().putExtra("location", location),
+            view.intentFor<EditLocationView>().putExtra("location", location),
             LOCATION_REQUEST
         )
     }
