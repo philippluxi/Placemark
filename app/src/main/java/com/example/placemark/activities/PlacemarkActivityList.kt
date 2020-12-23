@@ -46,7 +46,7 @@ class PlacemarkListActivity : AppCompatActivity(), PlacemarkListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.item_add -> startActivityForResult<PlacemarkActivity>(0)
+            R.id.item_add -> startActivityForResult<PlacemarkView>(0)
             R.id.item_map -> startActivity<PlacemarkMapsActivity>()
         }
         return super.onOptionsItemSelected(item)
@@ -54,7 +54,7 @@ class PlacemarkListActivity : AppCompatActivity(), PlacemarkListener {
 
     override fun onPlacemarkClick(placemark: PlacemarkModel) {
         startActivityForResult(
-            intentFor<PlacemarkActivity>()
+            intentFor<PlacemarkView>()
                 .putExtra("placemark_edit", placemark), 0
         )
     }
