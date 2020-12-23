@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activities.PlacemarkMapsActivity" />
         <activity android:name=".activities.PlacemarkView" />
-        <activity android:name=".activities.PlacemarkListActivity">
+        <activity android:name=".activities.PlacemarkListView">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
