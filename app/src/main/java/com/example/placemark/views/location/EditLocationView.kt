@@ -1,4 +1,4 @@
-package com.example.placemark.activities
+package com.example.placemark.views.location
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

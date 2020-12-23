@@ -1,4 +1,4 @@
-package com.example.placemark.activities
+package com.example.placemark.views.placemarklist
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.placemark.R
 import com.example.placemark.helpers.readImageFromPath
 import com.example.placemark.models.PlacemarkModel
-import kotlinx.android.synthetic.main.activity_placemark.view.*
 import kotlinx.android.synthetic.main.card_placemark.view.*
 import kotlinx.android.synthetic.main.card_placemark.view.description
 import kotlinx.android.synthetic.main.card_placemark.view.placemarkTitle

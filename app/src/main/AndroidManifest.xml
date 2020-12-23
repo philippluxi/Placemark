@@ -17,8 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activities.PlacemarkMapsActivity" />
-        <activity android:name=".activities.PlacemarkView" />
-        <activity android:name=".activities.PlacemarkListView">
+        <activity android:name=".views.placemark.PlacemarkView" />
+        <activity android:name=".views.placemarklist.PlacemarkListView">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.EditLocationView"
+            android:name=".views.location.EditLocationView"
             android:label="@string/title_activity_map" />
 
         <meta-data

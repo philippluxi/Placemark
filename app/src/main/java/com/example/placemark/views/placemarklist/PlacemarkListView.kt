@@ -1,4 +1,4 @@
-package com.example.placemark.activities
+package com.example.placemark.views.placemarklist
 
 import android.content.Intent
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package com.example.placemark.activities
+package com.example.placemark.views.location
 
 import android.app.Activity
 import android.content.Intent
