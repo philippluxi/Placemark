@@ -1,6 +1,6 @@
 package com.example.placemark.views.placemarklist
 
-import com.example.placemark.activities.PlacemarkMapsActivity
+import com.example.placemark.views.map.PlacemarkMapView
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
@@ -29,6 +29,6 @@ class PlacemarkListPresenter(val view: PlacemarkListView) {
     }
 
     fun doShowPlacemarksMap() {
-        view.startActivity<PlacemarkMapsActivity>()
+        view.startActivity<PlacemarkMapView>()
     }
 }
