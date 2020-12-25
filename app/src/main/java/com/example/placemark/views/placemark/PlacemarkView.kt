@@ -25,14 +25,6 @@ class PlacemarkView : AppCompatActivity(), AnkoLogger {
 
     presenter = PlacemarkPresenter(this)
 
-    btnAdd.setOnClickListener {
-      if (placemarkTitle.text.toString().isEmpty()) {
-        toast(R.string.enter_placemark_title)
-      } else {
-        presenter.doAddOrSave(placemarkTitle.text.toString(), description.text.toString())
-      }
-    }
-
     chooseImage.setOnClickListener { presenter.doSelectImage() }
 
     placemarkLocation.setOnClickListener { presenter.doSetLocation() }
@@ -45,7 +37,6 @@ class PlacemarkView : AppCompatActivity(), AnkoLogger {
     if (placemark.image != null) {
       chooseImage.setText(R.string.change_placemark_image)
     }
-    btnAdd.setText(R.string.button_savePlacemark)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -56,6 +47,13 @@ class PlacemarkView : AppCompatActivity(), AnkoLogger {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
+      R.id.item_save -> {
+        if (placemarkTitle.text.toString().isEmpty()) {
+          toast(R.string.enter_placemark_title)
+        } else {
+          presenter.doAddOrSave(placemarkTitle.text.toString(), description.text.toString())
+        }
+      }
       R.id.item_delete -> {
         presenter.doDelete()
       }
