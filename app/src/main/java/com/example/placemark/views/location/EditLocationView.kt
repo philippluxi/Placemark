@@ -16,7 +16,8 @@ class EditLocationView : BaseView(), GoogleMap.OnMarkerDragListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        val mapFragment =
+            supportFragmentManager.findFragmentById(R.id.mapView) as SupportMapFragment
         presenter = EditLocationPresenter(this)
         mapFragment.getMapAsync {
             map = it

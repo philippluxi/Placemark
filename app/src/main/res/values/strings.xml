@@ -18,4 +18,7 @@
     <string name="placemark_description_Placeholder">Placemark Description</string>
     <string name="placemark_image_placeholder">Placemark Image</string>
     <string name="title_activity_placemark_maps">Map</string>
+    <string name="title_activity_placemark_list">Placemarks</string>
+    <string name="title_activity_placemark">Placemark</string>
+    <string name="title_activity_location">Placemark</string>
 </resources>
