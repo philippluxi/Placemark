@@ -1,6 +1,5 @@
 package com.example.placemark.views.location
 
-import android.app.Activity
 import android.content.Intent
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
