@@ -44,8 +44,8 @@ class PlacemarkView : BaseView(), AnkoLogger {
   }
 
   override fun showPlacemark(placemark: PlacemarkModel) {
-    placemarkTitle.setText(placemark.title)
-    description.setText(placemark.description)
+    if (placemarkTitle.text.isEmpty()) placemarkTitle.setText(placemark.title)
+    if (description.text.isEmpty()) description.setText(placemark.description)
     placemarkImage.setImageBitmap(readImageFromPath(this, placemark.image))
     if (placemark.image != null) {
       chooseImage.setText(R.string.change_placemark_image)
