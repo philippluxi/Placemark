@@ -1,15 +1,12 @@
 package com.example.placemark.views.placemark
 
 import android.content.Intent
-import org.jetbrains.anko.intentFor
 import com.example.placemark.helpers.showImagePicker
-import com.example.placemark.main.MainApp
 import com.example.placemark.models.Location
 import com.example.placemark.models.PlacemarkModel
 import com.example.placemark.views.BasePresenter
 import com.example.placemark.views.BaseView
 import com.example.placemark.views.*
-import com.example.placemark.views.location.EditLocationView
 
 
 class PlacemarkPresenter(view: BaseView) : BasePresenter(view) {

@@ -3,7 +3,6 @@ package com.example.placemark.views.placemarklist
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_placemark_list.*
 import com.example.placemark.R
