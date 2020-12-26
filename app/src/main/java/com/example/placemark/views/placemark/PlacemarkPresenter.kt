@@ -50,6 +50,11 @@ class PlacemarkPresenter(view: BaseView) : BasePresenter(view) {
 
     }
 
+    fun cachePlacemark(title: String, description: String) {
+        placemark.title = title
+        placemark.description = description
+    }
+
     fun doSetLocation() {
         if (edit == false) {
             view?.navigateTo(VIEW.LOCATION, LOCATION_REQUEST, "location", defaultLocation)

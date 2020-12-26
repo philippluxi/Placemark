@@ -11,6 +11,9 @@ import com.example.placemark.R
 import com.example.placemark.helpers.readImageFromPath
 import com.example.placemark.models.PlacemarkModel
 import com.example.placemark.views.BaseView
+import kotlinx.android.synthetic.main.activity_placemark.description
+import kotlinx.android.synthetic.main.activity_placemark.placemarkTitle
+import kotlinx.android.synthetic.main.card_placemark.*
 
 class PlacemarkView : BaseView(), AnkoLogger {
 
@@ -25,9 +28,15 @@ class PlacemarkView : BaseView(), AnkoLogger {
 
     presenter = initPresenter(PlacemarkPresenter(this)) as PlacemarkPresenter
 
-    chooseImage.setOnClickListener { presenter.doSelectImage() }
+    chooseImage.setOnClickListener {
+      presenter.cachePlacemark(placemarkTitle.text.toString(), description.text.toString())
+      presenter.doSelectImage()
+    }
 
-    placemarkLocation.setOnClickListener { presenter.doSetLocation() }
+    placemarkLocation.setOnClickListener {
+      presenter.cachePlacemark(placemarkTitle.text.toString(), description.text.toString())
+      presenter.doSetLocation()
+    }
   }
 
   override fun showPlacemark(placemark: PlacemarkModel) {
@@ -41,6 +50,7 @@ class PlacemarkView : BaseView(), AnkoLogger {
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     menuInflater.inflate(R.menu.menu_placemark, menu)
+    if (presenter.edit) menu.getItem(0).isVisible = true
     return super.onCreateOptionsMenu(menu)
   }
 
