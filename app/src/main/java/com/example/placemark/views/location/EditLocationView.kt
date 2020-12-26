@@ -1,13 +1,13 @@
 package com.example.placemark.views.location
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.Marker
 import com.example.placemark.R
+import com.example.placemark.views.BaseView
 
-class EditLocationView : AppCompatActivity(), GoogleMap.OnMarkerDragListener,
+class EditLocationView : BaseView(), GoogleMap.OnMarkerDragListener,
     GoogleMap.OnMarkerClickListener {
 
     lateinit var map: GoogleMap
@@ -22,7 +22,7 @@ class EditLocationView : AppCompatActivity(), GoogleMap.OnMarkerDragListener,
             map = it
             map.setOnMarkerDragListener(this)
             map.setOnMarkerClickListener(this)
-            presenter.initMap(map)
+            presenter.doConfigureMap(map)
         }
     }
 
@@ -31,15 +31,11 @@ class EditLocationView : AppCompatActivity(), GoogleMap.OnMarkerDragListener,
     override fun onMarkerDrag(marker: Marker) {}
 
     override fun onMarkerDragEnd(marker: Marker) {
-        presenter.doUpdateLocation(
-            marker.position.latitude,
-            marker.position.longitude,
-            map.cameraPosition.zoom
-        )
+        presenter.doUpdateLocation(marker.position.latitude, marker.position.longitude)
     }
 
     override fun onBackPressed() {
-        presenter.doOnBackPressed()
+        presenter.doSave()
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
