@@ -11,6 +11,7 @@ import com.example.placemark.R
 import com.example.placemark.helpers.readImageFromPath
 import com.example.placemark.models.PlacemarkModel
 import com.example.placemark.views.BaseView
+import com.google.android.gms.maps.GoogleMap
 import kotlinx.android.synthetic.main.activity_placemark.description
 import kotlinx.android.synthetic.main.activity_placemark.placemarkTitle
 import kotlinx.android.synthetic.main.card_placemark.*
@@ -19,6 +20,7 @@ class PlacemarkView : BaseView(), AnkoLogger {
 
   lateinit var presenter: PlacemarkPresenter
   var placemark = PlacemarkModel()
+  lateinit var map: GoogleMap
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -27,6 +29,12 @@ class PlacemarkView : BaseView(), AnkoLogger {
     init(toolbarAdd)
 
     presenter = initPresenter(PlacemarkPresenter(this)) as PlacemarkPresenter
+
+    mapView.onCreate(savedInstanceState)
+    mapView.getMapAsync {
+      map = it
+      presenter.doConfigureMap(map)
+    }
 
     chooseImage.setOnClickListener {
       presenter.cachePlacemark(placemarkTitle.text.toString(), description.text.toString())
@@ -82,5 +90,30 @@ class PlacemarkView : BaseView(), AnkoLogger {
 
   override fun onBackPressed() {
     presenter.doCancel()
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    mapView.onDestroy()
+  }
+
+  override fun onLowMemory() {
+    super.onLowMemory()
+    mapView.onLowMemory()
+  }
+
+  override fun onPause() {
+    super.onPause()
+    mapView.onPause()
+  }
+
+  override fun onResume() {
+    super.onResume()
+    mapView.onResume()
+  }
+
+  override fun onSaveInstanceState(outState: Bundle) {
+    super.onSaveInstanceState(outState)
+    mapView.onSaveInstanceState(outState)
   }
 }
