@@ -1,35 +1,43 @@
 package com.example.placemark.views.map
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.gms.maps.GoogleMap
 import com.example.placemark.R
 import com.example.placemark.helpers.readImageFromPath
 import com.example.placemark.models.PlacemarkModel
+import com.example.placemark.views.BaseView
 import com.google.android.gms.maps.model.Marker
 import kotlinx.android.synthetic.main.activity_placemark_list.toolbar
 import kotlinx.android.synthetic.main.activity_placemark_maps.*
 
-class PlacemarkMapView : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
+class PlacemarkMapView : BaseView(), GoogleMap.OnMarkerClickListener {
 
     lateinit var presenter: PlacemarkMapPresenter
+    lateinit var map: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_placemark_maps)
-        setSupportActionBar(toolbar)
-        presenter = PlacemarkMapPresenter(this)
+        super.init(toolbar)
+
+        presenter = initPresenter(PlacemarkMapPresenter(this)) as PlacemarkMapPresenter
 
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync {
-            presenter.doPopulateMap(it)
+            map = it
+            map.setOnMarkerClickListener(this)
+            presenter.loadPlacemarks()
         }
     }
 
-    fun showPlacemark(placemark: PlacemarkModel) {
+    override fun showPlacemark(placemark: PlacemarkModel) {
         currentTitle.text = placemark.title
         currentDescription.text = placemark.description
         currentImage.setImageBitmap(readImageFromPath(this, placemark.image))
+    }
+
+    override fun showPlacemarks(placemarks: List<PlacemarkModel>) {
+        presenter.doPopulateMap(map, placemarks)
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
