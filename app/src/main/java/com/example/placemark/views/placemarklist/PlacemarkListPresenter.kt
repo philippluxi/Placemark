@@ -6,29 +6,24 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import com.example.placemark.main.MainApp
 import com.example.placemark.models.PlacemarkModel
+import com.example.placemark.views.*
 import com.example.placemark.views.placemark.PlacemarkView
 
-class PlacemarkListPresenter(val view: PlacemarkListView) {
-
-    var app: MainApp
-
-    init {
-        app = view.application as MainApp
-    }
-
-    fun getPlacemarks() = app.placemarks.findAll()
+class PlacemarkListPresenter(view: BaseView) : BasePresenter(view) {
 
     fun doAddPlacemark() {
-        view.startActivityForResult<PlacemarkView>(0)
+        view?.navigateTo(VIEW.PLACEMARK)
     }
 
     fun doEditPlacemark(placemark: PlacemarkModel) {
-        view.startActivityForResult(
-            view.intentFor<PlacemarkView>().putExtra("placemark_edit", placemark), 0
-        )
+        view?.navigateTo(VIEW.PLACEMARK, 0, "placemark_edit", placemark)
     }
 
     fun doShowPlacemarksMap() {
-        view.startActivity<PlacemarkMapView>()
+        view?.navigateTo(VIEW.MAPS)
+    }
+
+    fun loadPlacemarks() {
+        view?.showPlacemarks(app.placemarks.findAll())
     }
 }
