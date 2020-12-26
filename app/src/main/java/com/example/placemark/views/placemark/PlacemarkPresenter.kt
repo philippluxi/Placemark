@@ -3,6 +3,7 @@ package com.example.placemark.views.placemark
 import android.annotation.SuppressLint
 import android.content.Intent
 import com.example.placemark.helpers.checkLocationPermissions
+import com.example.placemark.helpers.createDefaultLocationRequest
 import com.example.placemark.helpers.isPermissionGranted
 import com.example.placemark.helpers.showImagePicker
 import com.example.placemark.models.Location
@@ -11,11 +12,14 @@ import com.example.placemark.views.BasePresenter
 import com.example.placemark.views.BaseView
 import com.example.placemark.views.*
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.activity_placemark.*
 
 
 class PlacemarkPresenter(view: BaseView) : BasePresenter(view) {
@@ -26,6 +30,7 @@ class PlacemarkPresenter(view: BaseView) : BasePresenter(view) {
     var map: GoogleMap? = null
     var locationService: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(view)
+    val locationRequest = createDefaultLocationRequest()
 
     init {
         if (view.intent.hasExtra("placemark_edit")) {
@@ -136,6 +141,21 @@ class PlacemarkPresenter(view: BaseView) : BasePresenter(view) {
     fun doSetCurrentLocation() {
         locationService.lastLocation.addOnSuccessListener {
             locationUpdate(it.latitude, it.longitude)
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    fun doResartLocationUpdates() {
+        var locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                if (locationResult != null && locationResult.locations != null) {
+                    val l = locationResult.locations.last()
+                    locationUpdate(l.latitude, l.longitude)
+                }
+            }
+        }
+        if (!edit) {
+            locationService.requestLocationUpdates(locationRequest, locationCallback, null)
         }
     }
 }
