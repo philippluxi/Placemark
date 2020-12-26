@@ -1,12 +1,16 @@
 package com.example.placemark.views.placemark
 
 import android.content.Intent
+import com.example.placemark.helpers.checkLocationPermissions
+import com.example.placemark.helpers.isPermissionGranted
 import com.example.placemark.helpers.showImagePicker
 import com.example.placemark.models.Location
 import com.example.placemark.models.PlacemarkModel
 import com.example.placemark.views.BasePresenter
 import com.example.placemark.views.BaseView
 import com.example.placemark.views.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
@@ -19,6 +23,8 @@ class PlacemarkPresenter(view: BaseView) : BasePresenter(view) {
     var defaultLocation = Location(48.983307948993094, 12.105706251194382, 15f)
     var edit = false
     var map: GoogleMap? = null
+    var locationService: FusedLocationProviderClient =
+        LocationServices.getFusedLocationProviderClient(view)
 
     init {
         if (view.intent.hasExtra("placemark_edit")) {
@@ -26,8 +32,9 @@ class PlacemarkPresenter(view: BaseView) : BasePresenter(view) {
             placemark = view.intent.extras?.getParcelable<PlacemarkModel>("placemark_edit")!!
             view.showPlacemark(placemark)
         } else {
-            placemark.lat = defaultLocation.lat
-            placemark.lng = defaultLocation.lng
+            if (checkLocationPermissions(view)) {
+                // todo get the current location
+            }
         }
     }
 
@@ -115,4 +122,16 @@ class PlacemarkPresenter(view: BaseView) : BasePresenter(view) {
         view?.showPlacemark(placemark)
     }
 
+    override fun doRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        if (isPermissionGranted(requestCode, grantResults)) {
+            // todo get the current location
+        } else {
+            // permissions denied, so use the default location
+            locationUpdate(defaultLocation.lat, defaultLocation.lng)
+        }
+    }
 }
