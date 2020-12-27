@@ -2,6 +2,8 @@ package com.example.placemark.views.placemarklist
 
 import com.example.placemark.models.PlacemarkModel
 import com.example.placemark.views.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class PlacemarkListPresenter(view: BaseView) : BasePresenter(view) {
 
@@ -18,6 +20,11 @@ class PlacemarkListPresenter(view: BaseView) : BasePresenter(view) {
     }
 
     fun loadPlacemarks() {
-        view?.showPlacemarks(app.placemarks.findAll())
+        doAsync {
+            val placemarks = app.placemarks.findAll()
+            uiThread {
+                view?.showPlacemarks(placemarks)
+            }
+        }
     }
 }

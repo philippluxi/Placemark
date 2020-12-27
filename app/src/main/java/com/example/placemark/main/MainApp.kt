@@ -5,6 +5,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import com.example.placemark.models.json.PlacemarkJSONStore
 import com.example.placemark.models.PlacemarkStore
+import com.example.placemark.room.PlacemarkStoreRoom
 
 class MainApp : Application(), AnkoLogger {
 
@@ -12,7 +13,8 @@ class MainApp : Application(), AnkoLogger {
 
     override fun onCreate() {
         super.onCreate()
-        placemarks = PlacemarkJSONStore(applicationContext)
+        // placemarks = PlacemarkJSONStore(applicationContext)
+        placemarks = PlacemarkStoreRoom(applicationContext)
         info("Placemark started")
     }
 }
