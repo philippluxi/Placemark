@@ -20,6 +20,8 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.activity_placemark.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 
 class PlacemarkPresenter(view: BaseView) : BasePresenter(view) {
@@ -47,12 +49,16 @@ class PlacemarkPresenter(view: BaseView) : BasePresenter(view) {
     fun doAddOrSave(title: String, description: String) {
         placemark.title = title
         placemark.description = description
-        if (edit) {
-            app.placemarks.update(placemark)
-        } else {
-            app.placemarks.create(placemark)
+        doAsync {
+            if (edit) {
+                app.placemarks.update(placemark)
+            } else {
+                app.placemarks.create(placemark)
+            }
+            uiThread {
+                view?.finish()
+            }
         }
-        view?.finish()
     }
 
     fun doCancel() {
