@@ -1,4 +1,4 @@
-package com.example.placemark.models
+package com.example.placemark.models.json
 
 
 import android.content.Context
@@ -7,6 +7,8 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import org.jetbrains.anko.AnkoLogger
 import com.example.placemark.helpers.*
+import com.example.placemark.models.PlacemarkModel
+import com.example.placemark.models.PlacemarkStore
 import java.util.*
 
 val JSON_FILE = "placemarks.json"

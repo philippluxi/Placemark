@@ -51,6 +51,11 @@ class EditLocationView : BaseView(), GoogleMap.OnMarkerDragListener,
         lng.text = "%.6f".format(marker.position.longitude)
     }
 
+    override fun showLocation(latitude: Double, longitude: Double) {
+        lat.text = "%.6f".format(latitude)
+        lng.text = "%.6f".format(longitude)
+    }
+
     override fun onMarkerDragEnd(marker: Marker) {
         presenter.doUpdateLocation(marker.position.latitude, marker.position.longitude)
     }
