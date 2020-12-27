@@ -7,6 +7,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import kotlinx.android.synthetic.main.activity_map.*
 import com.example.placemark.R
+import com.example.placemark.models.Location
 import com.example.placemark.views.BaseView
 
 
@@ -51,9 +52,9 @@ class EditLocationView : BaseView(), GoogleMap.OnMarkerDragListener,
         lng.text = "%.6f".format(marker.position.longitude)
     }
 
-    override fun showLocation(latitude: Double, longitude: Double) {
-        lat.text = "%.6f".format(latitude)
-        lng.text = "%.6f".format(longitude)
+    override fun showLocation(location: Location) {
+        lat.text = "%.6f".format(location.lat)
+        lng.text = "%.6f".format(location.lng)
     }
 
     override fun onMarkerDragEnd(marker: Marker) {

@@ -66,8 +66,12 @@ class PlacemarkPresenter(view: BaseView) : BasePresenter(view) {
     }
 
     fun doDelete() {
-        app.placemarks.delete(placemark)
-        view?.finish()
+        doAsync {
+            app.placemarks.delete(placemark)
+            uiThread {
+                view?.finish()
+            }
+        }
     }
 
     fun doSelectImage() {
@@ -87,7 +91,7 @@ class PlacemarkPresenter(view: BaseView) : BasePresenter(view) {
             VIEW.LOCATION,
             LOCATION_REQUEST,
             "location",
-            Location(placemark.lat, placemark.lng, placemark.zoom)
+            Location(placemark.location.lat, placemark.location.lng, placemark.location.zoom)
         )
     }
 
@@ -99,35 +103,32 @@ class PlacemarkPresenter(view: BaseView) : BasePresenter(view) {
             }
             LOCATION_REQUEST -> {
                 val location = data.extras?.getParcelable<Location>("location")!!
-                placemark.lat = location.lat
-                placemark.lng = location.lng
-                placemark.zoom = location.zoom
-                locationUpdate(placemark.lat, placemark.lng)
+                placemark.location = location
+                locationUpdate(location)
             }
         }
     }
 
     fun doConfigureMap(m: GoogleMap) {
         map = m
-        locationUpdate(placemark.lat, placemark.lng)
+        locationUpdate(placemark.location)
     }
 
-    fun locationUpdate(lat: Double, lng: Double) {
-        placemark.lat = lat
-        placemark.lng = lng
-        placemark.zoom = 15f
+    fun locationUpdate(location: Location) {
+        placemark.location = location
         map?.clear()
         map?.uiSettings?.isZoomControlsEnabled = true
         val options =
-            MarkerOptions().title(placemark.title).position(LatLng(placemark.lat, placemark.lng))
+            MarkerOptions().title(placemark.title)
+                .position(LatLng(placemark.location.lat, placemark.location.lng))
         map?.addMarker(options)
         map?.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
-                LatLng(placemark.lat, placemark.lng),
-                placemark.zoom
+                LatLng(placemark.location.lat, placemark.location.lng),
+                placemark.location.zoom
             )
         )
-        view?.showPlacemark(placemark)
+        view?.showLocation(placemark.location)
     }
 
     override fun doRequestPermissionsResult(
@@ -139,14 +140,14 @@ class PlacemarkPresenter(view: BaseView) : BasePresenter(view) {
             doSetCurrentLocation()
         } else {
             // permissions denied, so use the default location
-            locationUpdate(defaultLocation.lat, defaultLocation.lng)
+            locationUpdate(defaultLocation)
         }
     }
 
     @SuppressLint("MissingPermission")
     fun doSetCurrentLocation() {
         locationService.lastLocation.addOnSuccessListener {
-            locationUpdate(it.latitude, it.longitude)
+            locationUpdate(Location(it.latitude, it.longitude))
         }
     }
 
@@ -156,7 +157,7 @@ class PlacemarkPresenter(view: BaseView) : BasePresenter(view) {
             override fun onLocationResult(locationResult: LocationResult?) {
                 if (locationResult != null && locationResult.locations != null) {
                     val l = locationResult.locations.last()
-                    locationUpdate(l.latitude, l.longitude)
+                    locationUpdate(Location(l.latitude, l.longitude))
                 }
             }
         }

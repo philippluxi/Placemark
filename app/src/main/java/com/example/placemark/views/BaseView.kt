@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.example.placemark.models.Location
 import org.jetbrains.anko.AnkoLogger
 
 import com.example.placemark.models.PlacemarkModel
@@ -75,5 +76,5 @@ open abstract class BaseView : AppCompatActivity(), AnkoLogger {
     open fun showPlacemarks(placemarks: List<PlacemarkModel>) {}
     open fun showProgress() {}
     open fun hideProgress() {}
-    open fun showLocation(latitude: Double, longitude: Double) {}
+    open fun showLocation(location: Location) {}
 }
