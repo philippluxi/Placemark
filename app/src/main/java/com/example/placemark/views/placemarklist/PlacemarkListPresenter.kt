@@ -27,4 +27,8 @@ class PlacemarkListPresenter(view: BaseView) : BasePresenter(view) {
             }
         }
     }
+
+    fun doLogout() {
+        view?.navigateTo(VIEW.LOGIN)
+    }
 }
