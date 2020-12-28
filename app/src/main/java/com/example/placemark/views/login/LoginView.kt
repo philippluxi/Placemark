@@ -25,6 +25,16 @@ class LoginView : BaseView() {
             if (email == "" || password == "") {
                 toast("Please provide email + password")
             } else {
+                presenter.doSignUp(email, password)
+            }
+        }
+
+        logIn.setOnClickListener {
+            val email = email.text.toString()
+            val password = password.text.toString()
+            if (email == "" || password == "") {
+                toast("Please provide email + password")
+            } else {
                 presenter.doLogin(email, password)
             }
         }
