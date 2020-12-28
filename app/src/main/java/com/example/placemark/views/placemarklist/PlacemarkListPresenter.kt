@@ -2,6 +2,7 @@ package com.example.placemark.views.placemarklist
 
 import com.example.placemark.models.PlacemarkModel
 import com.example.placemark.views.*
+import com.google.firebase.auth.FirebaseAuth
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
@@ -29,6 +30,7 @@ class PlacemarkListPresenter(view: BaseView) : BasePresenter(view) {
     }
 
     fun doLogout() {
+        FirebaseAuth.getInstance().signOut()
         view?.navigateTo(VIEW.LOGIN)
     }
 }

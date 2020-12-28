@@ -15,6 +15,7 @@ import com.example.placemark.views.login.LoginView
 import com.example.placemark.views.map.PlacemarkMapView
 import com.example.placemark.views.placemark.PlacemarkView
 import com.example.placemark.views.placemarklist.PlacemarkListView
+import com.google.firebase.auth.FirebaseAuth
 
 val IMAGE_REQUEST = 1
 val LOCATION_REQUEST = 2
@@ -51,6 +52,10 @@ open abstract class BaseView : AppCompatActivity(), AnkoLogger {
         toolbar.title = title
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(upEnabled)
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            toolbar.title = "${title}: ${user.email}"
+        }
     }
 
     override fun onDestroy() {
