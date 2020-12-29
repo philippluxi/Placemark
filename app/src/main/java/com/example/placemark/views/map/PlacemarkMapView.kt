@@ -1,6 +1,7 @@
 package com.example.placemark.views.map
 
 import android.os.Bundle
+import com.bumptech.glide.Glide
 import com.google.android.gms.maps.GoogleMap
 import com.example.placemark.R
 import com.example.placemark.helpers.readImageFromPath
@@ -33,7 +34,7 @@ class PlacemarkMapView : BaseView(), GoogleMap.OnMarkerClickListener {
     override fun showPlacemark(placemark: PlacemarkModel) {
         currentTitle.text = placemark.title
         currentDescription.text = placemark.description
-        currentImage.setImageBitmap(readImageFromPath(this, placemark.image))
+        Glide.with(this).load(placemark.image).into(currentImage)
     }
 
     override fun showPlacemarks(placemarks: List<PlacemarkModel>) {
