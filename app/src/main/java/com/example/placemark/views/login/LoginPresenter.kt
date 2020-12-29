@@ -1,5 +1,6 @@
 package com.example.placemark.views.login
 
+import com.example.placemark.models.firebase.PlacemarkFireStore
 import com.google.firebase.auth.FirebaseAuth
 import com.example.placemark.views.BasePresenter
 import com.example.placemark.views.BaseView
@@ -10,16 +11,31 @@ import org.jetbrains.anko.toast
 class LoginPresenter(view: BaseView) : BasePresenter(view) {
 
     var auth: FirebaseAuth = FirebaseAuth.getInstance()
+    var fireStore: PlacemarkFireStore? = null
+
+    init {
+        if (app.placemarks is PlacemarkFireStore) {
+            fireStore = app.placemarks as PlacemarkFireStore
+        }
+    }
 
     fun doLogin(email: String, password: String) {
         view?.showProgress()
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(view!!) { task ->
             if (task.isSuccessful) {
-                view?.navigateTo(VIEW.LIST)
+                if (fireStore != null) {
+                    fireStore!!.fetchPlacemarks {
+                        view?.hideProgress()
+                        view?.navigateTo(VIEW.LIST)
+                    }
+                } else {
+                    view?.hideProgress()
+                    view?.navigateTo(VIEW.LIST)
+                }
             } else {
-                view?.longToast("Log-In Failed: ${task.exception?.message}")
+                view?.hideProgress()
+                view?.toast("Sign Up Failed: ${task.exception?.message}")
             }
-            view?.hideProgress()
         }
     }
 
@@ -27,11 +43,18 @@ class LoginPresenter(view: BaseView) : BasePresenter(view) {
         view?.showProgress()
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(view!!) { task ->
             if (task.isSuccessful) {
+                view?.hideProgress()
                 view?.navigateTo(VIEW.LIST)
             } else {
-                view?.longToast("Sign Up Failed: ${task.exception?.message}")
+                view?.hideProgress()
+                view?.toast("Sign Up Failed: ${task.exception?.message}")
             }
-            view?.hideProgress()
         }
+    }
+
+    fun doLogout() {
+        FirebaseAuth.getInstance().signOut()
+        app.placemarks.clear()
+        view?.navigateTo(VIEW.LOGIN)
     }
 }
