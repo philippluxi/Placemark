@@ -48,4 +48,8 @@ class PlacemarkMemStore : PlacemarkStore, AnkoLogger {
     override fun delete(placemark: PlacemarkModel) {
         placemarks.remove(placemark)
     }
+
+    override fun clear() {
+        placemarks.clear()
+    }
 }

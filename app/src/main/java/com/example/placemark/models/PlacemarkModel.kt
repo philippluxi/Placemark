@@ -11,6 +11,7 @@ import kotlinx.android.parcel.Parcelize
 @Entity
 data class PlacemarkModel(
     @PrimaryKey(autoGenerate = true) var id: Long = 0,
+    var fbId: String = "",
     var title: String = "",
     var description: String = "",
     var image: String = "",
@@ -21,5 +22,5 @@ data class PlacemarkModel(
 data class Location(
     var lat: Double = 0.0,
     var lng: Double = 0.0,
-    var zoom: Float = 15f
+    var zoom: Float = 0f
 ) : Parcelable
