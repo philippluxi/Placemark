@@ -1,17 +1,24 @@
 package com.example.placemark.models.firebase
 
 import android.content.Context
+import android.graphics.Bitmap
+import com.example.placemark.helpers.readImageFromPath
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import org.jetbrains.anko.AnkoLogger
 import com.example.placemark.models.PlacemarkModel
 import com.example.placemark.models.PlacemarkStore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 class PlacemarkFireStore(val context: Context) : PlacemarkStore, AnkoLogger {
 
     val placemarks = ArrayList<PlacemarkModel>()
     lateinit var userId: String
     lateinit var db: DatabaseReference
+    lateinit var st: StorageReference
 
     override fun findAll(): List<PlacemarkModel> {
         return placemarks
@@ -28,6 +35,7 @@ class PlacemarkFireStore(val context: Context) : PlacemarkStore, AnkoLogger {
             placemark.fbId = key
             placemarks.add(placemark)
             db.child("users").child(userId).child("placemarks").child(key).setValue(placemark)
+            updateImage(placemark)
         }
     }
 
@@ -42,7 +50,9 @@ class PlacemarkFireStore(val context: Context) : PlacemarkStore, AnkoLogger {
 
         db.child("users").child(userId).child("placemarks").child(placemark.fbId)
             .setValue(placemark)
-
+        if ((placemark.image.length) > 0 && (placemark.image[0] != 'h')) {
+            updateImage(placemark)
+        }
     }
 
     override fun delete(placemark: PlacemarkModel) {
@@ -52,6 +62,32 @@ class PlacemarkFireStore(val context: Context) : PlacemarkStore, AnkoLogger {
 
     override fun clear() {
         placemarks.clear()
+    }
+
+    fun updateImage(placemark: PlacemarkModel) {
+        if (placemark.image != "") {
+            val fileName = File(placemark.image)
+            val imageName = fileName.name
+
+            var imageRef = st.child(userId + '/' + imageName)
+            val baos = ByteArrayOutputStream()
+            val bitmap = readImageFromPath(context, placemark.image)
+
+            bitmap?.let {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                val data = baos.toByteArray()
+                val uploadTask = imageRef.putBytes(data)
+                uploadTask.addOnFailureListener {
+                    println(it.message)
+                }.addOnSuccessListener { taskSnapshot ->
+                    taskSnapshot.metadata!!.reference!!.downloadUrl.addOnSuccessListener {
+                        placemark.image = it.toString()
+                        db.child("users").child(userId).child("placemarks").child(placemark.fbId)
+                            .setValue(placemark)
+                    }
+                }
+            }
+        }
     }
 
     fun fetchPlacemarks(placemarksReady: () -> Unit) {
@@ -70,6 +106,7 @@ class PlacemarkFireStore(val context: Context) : PlacemarkStore, AnkoLogger {
         }
         userId = FirebaseAuth.getInstance().currentUser!!.uid
         db = FirebaseDatabase.getInstance().reference
+        st = FirebaseStorage.getInstance().reference
         placemarks.clear()
         db.child("users").child(userId).child("placemarks")
             .addListenerForSingleValueEvent(valueEventListener)
